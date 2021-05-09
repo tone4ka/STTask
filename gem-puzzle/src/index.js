@@ -4,6 +4,7 @@ for (let i = 1; i <= 15; i += 1) {
 }
 cells.push(0);
 
+// функция для перемешивания массивов
 function shuffle(cellsArr) {
   const shuffleArr = [...cellsArr];
   function mover(positions) {
@@ -36,6 +37,8 @@ console.log('gameField');
 console.log(gameField);
 cells = cells.join(' ');
 
+// функция-перемещатель на один ход
+// (по условию модифицирует само поле, поэтому в авторешении ее не использовала)
 function move(positions) {
   if (typeof positions === 'string') return;
   const [posFrom, posTo] = positions;
@@ -43,22 +46,26 @@ function move(positions) {
   gameField[posFrom] = 0;
 }
 
+// функция, выдающая список ходов для переданного состояния поля
 function stepsList(field) {
   const startFieldState = [...field].join(' ');
   let currentStateField = [...field].join(' ');
-  let h;
+  let heuristic; // на сколько позиция клетки отличается от нужной
   let step;
-  function currentMove(positions) {
+  // функция для определения следующего возможного состояния поля
+  // без изменения текущего состояния поля
+  function updateStep(positions) {
     const newStateField = currentStateField.split(' ').map((i) => +i);
     const [posFrom, posTo] = positions;
     newStateField[posTo] = newStateField[posFrom];
     newStateField[posFrom] = 0;
-    h = newStateField.reduce((count, i, ind) => {
+    heuristic = newStateField.reduce((count, i, ind) => {
       if (ind !== 15) return i !== ind + 1 ? count + Math.abs(i - (ind + 1)) : count;
       return i !== 0 ? count + Math.abs(i - (ind + 1)) : count;
     }, 0);
     step = newStateField.join(' ');
   }
+  // проверяем, не в собранном ли состоянии передано поле
   const win = gameField.every((i, ind, arr) => {
     if (ind === 15) return i === 0;
     if (ind === 0) return i === 1;
@@ -68,149 +75,159 @@ function stepsList(field) {
     console.log('the list is complete!');
     return [];
   }
+  // проверяем, имеет ли решение переданное состояние поля
   let posTo = field.indexOf(0);
-  let counter = 0;
+  let parity = 0;
   field.forEach((item, index) => {
     for (let i = index + 1; i < field.length; i += 1) {
-      if (item > field[i] && field[i] !== 0) counter += 1;
+      if (item > field[i] && field[i] !== 0) parity += 1;
     }
   });
-  counter = counter + Math.trunc(posTo / 4) + 1;
-  if (counter % 2 !== 0) {
+  parity = parity + Math.trunc(posTo / 4) + 1;
+  if (parity % 2 !== 0) {
     console.log('no solution');
     return 'no solution!';
   }
-  // А*..................
-  // for null step
-  const stepParentGHFopen = [];
-  const stepParentGHFclosed = [];
+  // алгоритм А* для поиска решения головоломки..................
+  // для нулевого шага
+  const openSteps = [];
+  const closedSteps = [];
   let parent = null;
-  let g = 0;
-  h = field.reduce((count, i, ind) => {
+  let distance = 0;
+  heuristic = field.reduce((count, i, ind) => {
     if (ind !== 15) return i !== ind + 1 ? count + Math.abs(i - (ind + 1)) : count;
     return i !== 0 ? count + Math.abs(i - (ind + 1)) : count;
   }, 0);
-  let f = g + h;
+  let weight = distance + heuristic;
   step = currentStateField;
-  stepParentGHFopen.push([step, parent, g, h, f]);
-  // for others steps
-  while (stepParentGHFopen.length > 0) {
+  openSteps.push([step, parent, distance, heuristic, weight]);
+
+  // цикл для остальных шагов
+  while (openSteps.length > 0) {
     let isOpen;
     if (parent === null) {
-      stepParentGHFclosed.push([step, parent, g, h, f]);
+      // перемещаем нулевой шаг в закрытые
+      closedSteps.push([step, parent, distance, heuristic, weight]);
       const stepNull = step;
-      isOpen = stepParentGHFopen.findIndex((i) => i[0] === stepNull);
-      stepParentGHFopen.splice(isOpen, 1);
+      isOpen = openSteps.findIndex((i) => i[0] === stepNull);
+      openSteps.splice(isOpen, 1);
     }
-    g += 1;
-    const currentStateFieldArr = currentStateField.split(' ').map((i) => +i);
+    distance += 1;
     parent = currentStateField;
+    const currentStateFieldArr = currentStateField.split(' ').map((i) => +i);
     posTo = currentStateFieldArr.indexOf(0);
     if (posTo > 3) {
-      currentMove([posTo - 4, posTo]);
-      f = g + h;
+      // если не первая строка, проверяем верхнего соседа
+      updateStep([posTo - 4, posTo]);
+      weight = distance + heuristic;
       const stepNotFirstString = step;
-      if (!stepParentGHFclosed.some((i) => i[0] === stepNotFirstString)) {
-        isOpen = stepParentGHFopen.findIndex((i) => i[0] === stepNotFirstString);
+      if (!closedSteps.some((i) => i[0] === stepNotFirstString)) {
+        isOpen = openSteps.findIndex((i) => i[0] === stepNotFirstString);
         if (isOpen !== -1) {
-          if (stepParentGHFopen[isOpen][4] < f) {
-            stepParentGHFopen[isOpen] = [step, parent, g, h, f];
+          if (openSteps[isOpen][4] < weight) {
+            openSteps[isOpen] = [step, parent, distance, heuristic, weight];
           }
         } else {
-          stepParentGHFopen.push([step, parent, g, h, f]);
+          openSteps.push([step, parent, distance, heuristic, weight]);
         }
       }
       if (step === cells) {
-        stepParentGHFclosed.push([step, parent, g, h, f]);
+        closedSteps.push([step, parent, distance, heuristic, weight]);
         break;
       }
     }
     if (posTo % 4 !== 0) {
-      currentMove([posTo - 1, posTo]);
-      f = g + h;
+      // если не левый столбец, проверяем левого соседа
+      updateStep([posTo - 1, posTo]);
+      weight = distance + heuristic;
       const stepNotLeft = step;
-      if (!stepParentGHFclosed.some((i) => i[0] === stepNotLeft)) {
-        isOpen = stepParentGHFopen.findIndex((i) => i[0] === stepNotLeft);
+      if (!closedSteps.some((i) => i[0] === stepNotLeft)) {
+        isOpen = openSteps.findIndex((i) => i[0] === stepNotLeft);
         if (isOpen !== -1) {
-          if (stepParentGHFopen[isOpen][4] < f) {
-            stepParentGHFopen[isOpen] = [step, parent, g, h, f];
+          if (openSteps[isOpen][4] < weight) {
+            openSteps[isOpen] = [step, parent, distance, heuristic, weight];
           }
         } else {
-          stepParentGHFopen.push([step, parent, g, h, f]);
+          openSteps.push([step, parent, distance, heuristic, weight]);
         }
       }
       if (step === cells) {
-        stepParentGHFclosed.push([step, parent, g, h, f]);
+        closedSteps.push([step, parent, distance, heuristic, weight]);
         break;
       }
     }
     if ((posTo + 1) % 4 !== 0) {
-      currentMove([posTo + 1, posTo]);
-      f = g + h;
+      // если не правый столбец, проверяем правого соседа
+      updateStep([posTo + 1, posTo]);
+      weight = distance + heuristic;
       const stepNotRight = step;
-      if (!stepParentGHFclosed.some((i) => i[0] === stepNotRight)) {
-        isOpen = stepParentGHFopen.findIndex((i) => i[0] === stepNotRight);
+      if (!closedSteps.some((i) => i[0] === stepNotRight)) {
+        isOpen = openSteps.findIndex((i) => i[0] === stepNotRight);
         if (isOpen !== -1) {
-          if (stepParentGHFopen[isOpen][4] < f) {
-            stepParentGHFopen[isOpen] = [step, parent, g, h, f];
+          if (openSteps[isOpen][4] < weight) {
+            openSteps[isOpen] = [step, parent, distance, heuristic, weight];
           }
         } else {
-          stepParentGHFopen.push([step, parent, g, h, f]);
+          openSteps.push([step, parent, distance, heuristic, weight]);
         }
       }
       if (step === cells) {
-        stepParentGHFclosed.push([step, parent, g, h, f]);
+        closedSteps.push([step, parent, distance, heuristic, weight]);
         break;
       }
     }
     if (posTo < 12) {
-      currentMove([posTo + 4, posTo]);
-      f = g + h;
+      // если не последняя строка, проверяем нижнего соседа
+      updateStep([posTo + 4, posTo]);
+      weight = distance + heuristic;
       const stepNotLastString = step;
-      if (!stepParentGHFclosed.some((i) => i[0] === stepNotLastString)) {
-        isOpen = stepParentGHFopen.findIndex((i) => i[0] === stepNotLastString);
+      if (!closedSteps.some((i) => i[0] === stepNotLastString)) {
+        isOpen = openSteps.findIndex((i) => i[0] === stepNotLastString);
         if (isOpen !== -1) {
-          if (stepParentGHFopen[isOpen][4] < f) {
-            stepParentGHFopen[isOpen] = [step, parent, g, h, f];
+          if (openSteps[isOpen][4] < weight) {
+            openSteps[isOpen] = [step, parent, distance, heuristic, weight];
           }
         } else {
-          stepParentGHFopen.push([step, parent, g, h, f]);
+          openSteps.push([step, parent, distance, heuristic, weight]);
         }
         if (step === cells) {
-          stepParentGHFclosed.push([step, parent, g, h, f]);
+          closedSteps.push([step, parent, distance, heuristic, weight]);
           break;
         }
       }
     }
-    // looking for a new step with minimum weight f
-    let minF = Infinity;
+    // поиск нового шага с минимальным весом
+    let minWeight = Infinity;
     let newStep = null;
-    let newG = null;
-    stepParentGHFopen.forEach((i) => {
-      if (i[4] < minF) {
-        [, , , , minF] = i;
-        [, , newG] = i;
-        newStep = i;
+    let newDistance = null;
+    openSteps.forEach((item) => {
+      if (item[4] < minWeight) {
+        [, , , , minWeight] = item;
+        [, , newDistance] = item;
+        newStep = item;
       }
     });
-    g = newG;
+    // обновляем параметры для нового шага и перемещаем его в закрытые
+    distance = newDistance;
     [currentStateField] = newStep;
-    stepParentGHFclosed.push(newStep);
+    closedSteps.push(newStep);
     const currField = currentStateField;
-    isOpen = stepParentGHFopen.findIndex((i) => i[0] === currField);
-    stepParentGHFopen.splice(isOpen, 1);
+    isOpen = openSteps.findIndex((i) => i[0] === currField);
+    openSteps.splice(isOpen, 1);
   }
   console.log('closed:');
-  console.log(stepParentGHFclosed);
-  // create the path list
+  console.log(closedSteps);
+
+  // создаем список родителей для собранного состояния
   let curState = cells;
   const parentsArr = [];
   do {
     const state = curState;
-    const elem = stepParentGHFclosed.find((i) => i[0] === state);
+    const elem = closedSteps.find((i) => i[0] === state);
     [, curState] = elem;
     parentsArr.unshift(curState);
   } while (curState !== startFieldState);
+  // создаем список оптимальных ходов, определяя позиции ходов по списку родителей
   const pathList = [];
   for (let i = 0; i < parentsArr.length; i += 1) {
     const pposTo = parentsArr[i].split(' ').indexOf('0');
@@ -227,12 +244,11 @@ function stepsList(field) {
 
 function autoGame(field, posList) {
   if (typeof posList === 'string') {
-    console.log(posList);
-    return posList;
+    return false;
   }
   const startFieldState = [...field];
-  posList.forEach((i) => {
-    const [posFrom, posTo] = i;
+  posList.forEach((item) => {
+    const [posFrom, posTo] = item;
     startFieldState[posTo] = startFieldState[posFrom];
     startFieldState[posFrom] = 0;
   });
@@ -241,7 +257,7 @@ function autoGame(field, posList) {
   return startFieldState;
 }
 
-// functions run
+// запуск функций
 const list = stepsList(gameField);
 console.log('pathList:');
 console.log(list);
