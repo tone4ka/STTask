@@ -16,9 +16,7 @@
 
 export default function shuffle(cells) {
   const shuffleArr = [...cells];
-
   function move(positions) {
-    // console.log(positions);
     const [posFrom, posTo] = positions;
     shuffleArr[posTo] = shuffleArr[posFrom];
     shuffleArr[posFrom] = 0;
