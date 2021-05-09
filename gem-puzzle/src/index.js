@@ -7,7 +7,8 @@ for (let i = 1; i <= 15; i += 1) {
 }
 cells.push(0);
 
-const gameField = shuffle();
+// const gameField = shuffle();
+const gameField = shuffle(cells);
 console.log('gameField');
 console.log(gameField);
 
@@ -55,13 +56,13 @@ function stepsList(field) {
   let counter = 0;
   field.forEach((item, index) => {
     for (let i = index + 1; i < field.length; i += 1) {
-      if (item > field[i]) counter += 1;
+      if (item > field[i] && field[i] !== 0) counter += 1;
     }
   });
   counter = counter + Math.trunc(posTo / 4) + 1;
   if (counter % 2 !== 0) {
     console.log('no solution');
-    // return 'no solution!';
+    return 'no solution!';
   }
   // алгоритм А*..................
   // шаг 1

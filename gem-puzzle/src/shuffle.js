@@ -14,12 +14,7 @@
 //   return shuffleArr;
 // }
 
-export default function shuffle() {
-  const cells = [];
-  for (let i = 1; i <= 15; i += 1) {
-    cells.push(i);
-  }
-  cells.push(0);
+export default function shuffle(cells) {
   const shuffleArr = [...cells];
 
   function move(positions) {
