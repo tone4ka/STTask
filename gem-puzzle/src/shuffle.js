@@ -14,6 +14,7 @@
 //   return shuffleArr;
 // }
 
+// заменила обычное перемешивание на 40 случайных ходов
 export default function shuffle(cells) {
   const shuffleArr = [...cells];
 
