@@ -6,15 +6,11 @@ for (let i = 1; i <= 15; i += 1) {
   cells.push(i);
 }
 cells.push(0);
-
-// const gameField = shuffle();
 const gameField = shuffle(cells);
+// const gameField = cells;
 console.log('gameField');
 console.log(gameField);
-
 cells = cells.join(' ');
-console.log(cells);
-// const gameField = cells;
 
 function move(positions) {
   if (typeof positions === 'string') return;
@@ -26,6 +22,7 @@ function move(positions) {
 }
 
 function stepsList(field) {
+  const startFieldState = [...field].join(' ');
   let currentStateField = [...field].join(' ');
   let h;
   let step;
@@ -48,8 +45,8 @@ function stepsList(field) {
     return i === arr[ind - 1] + 1;
   });
   if (win) {
-    console.log('win');
-    return 'Win!';
+    console.log('win!');
+    return [];
   }
   // проверка на существование решения
   let posTo = field.indexOf(0);
@@ -80,11 +77,9 @@ function stepsList(field) {
   stepParentGHFopen.push([step, parent, g, h, f]);
 
   // шаг 2 гоняем циклом остальных соседей
-  let counterCircle = 0;
   while (stepParentGHFopen.length > 0) {
-  // while (counterCircle < 10000) {
+    // while (counterCircle < 10000) {
     let isOpen;
-    counterCircle += 1;
     // добавляем нулевую вершину в закрытые и убираем из открытых
     if (parent === null) {
       stepParentGHFclosed.push([step, parent, g, h, f]);
@@ -113,7 +108,6 @@ function stepsList(field) {
       }
       if (step === cells) {
         stepParentGHFclosed.push([step, parent, g, h, f]);
-        console.log('uuuuuuuuhhhyyyyyyy');
         break;
       }
     }
@@ -135,7 +129,6 @@ function stepsList(field) {
       }
       if (step === cells) {
         stepParentGHFclosed.push([step, parent, g, h, f]);
-        console.log('uuuuuuuuhhhyyyyyyy');
         break;
       }
     }
@@ -157,7 +150,6 @@ function stepsList(field) {
       }
       if (step === cells) {
         stepParentGHFclosed.push([step, parent, g, h, f]);
-        console.log('uuuuuuuuhhhyyyyyyy');
         break;
       }
     }
@@ -178,7 +170,6 @@ function stepsList(field) {
         }
         if (step === cells) {
           stepParentGHFclosed.push([step, parent, g, h, f]);
-          console.log('uuuuuuuuhhhyyyyyyy');
           break;
         }
       }
@@ -201,10 +192,36 @@ function stepsList(field) {
     isOpen = stepParentGHFopen.findIndex((i) => i[0] === currentStateField);
     stepParentGHFopen.splice(isOpen, 1);
   }
+  console.log('closed:');
   console.log(stepParentGHFclosed);
-  console.log(stepParentGHFopen);
-
-  // return steps; // потом поменять на список шагов
+  startFieldState;
+  let curState = cells;
+  const parentsArr = [];
+  do {
+    const elem = stepParentGHFclosed.find((i) => i[0] === curState);
+    curState = elem[1];
+    parentsArr.unshift(curState);
+  } while (curState !== startFieldState);
+  const pathList = [];
+  for (let i = 0; i < parentsArr.length; i += 1) {
+    const pposTo = parentsArr[i].split(' ').indexOf('0');
+    if (i === parentsArr.length - 1) {
+      pathList.push([15, posTo]);
+    } else {
+      const pposFrom = parentsArr[i + 1].split(' ').indexOf('0');
+      pathList.push([pposFrom, pposTo]);
+    }
+  }
+  console.log('pathList:');
+  console.log(pathList);
+  console.log('win!');
+  return pathList;
 }
 
-stepsList(gameField);
+const list = stepsList(gameField);
+console.log('pathList:');
+console.log(list);
+
+// function autoGame(field, posList){
+
+// }
