@@ -38,7 +38,7 @@ function stepsList(field) {
     }, 0);
     step = newStateField.join(' ');
   }
-  // проверка на уже собранное поле, убрать?
+  // проверка на уже собранное поле
   const win = gameField.every((i, ind, arr) => {
     if (ind === 15) return i === 0;
     if (ind === 0) return i === 1;
@@ -65,7 +65,6 @@ function stepsList(field) {
   // шаг 1
   const stepParentGHFopen = [];
   const stepParentGHFclosed = [];
-  // заменить парент на индексы клеток, или добавить такой параметр??????????
   let parent = null;
   let g = 0;
   h = field.reduce((count, i, ind) => {
@@ -75,10 +74,8 @@ function stepsList(field) {
   let f = g + h;
   step = currentStateField;
   stepParentGHFopen.push([step, parent, g, h, f]);
-
   // шаг 2 гоняем циклом остальных соседей
   while (stepParentGHFopen.length > 0) {
-    // while (counterCircle < 10000) {
     let isOpen;
     // добавляем нулевую вершину в закрытые и убираем из открытых
     if (parent === null) {
@@ -174,7 +171,7 @@ function stepsList(field) {
         }
       }
     }
-    // теперь шаг 3: найти новую позту по весу и изменить куррентфилд?
+    // теперь шаг 3: находим новую позицию с минимальным весом f
     let minF = Infinity;
     let newStep = null;
     let newG = null;
@@ -216,10 +213,6 @@ function stepsList(field) {
   return pathList;
 }
 
-const list = stepsList(gameField);
-console.log('pathList:');
-console.log(list);
-
 function autoGame(field, posList) {
   if (typeof posList === 'string') {
     console.log(posList);
@@ -236,4 +229,8 @@ function autoGame(field, posList) {
   return startFieldState;
 }
 
+// запуск функций
+const list = stepsList(gameField);
+console.log('pathList:');
+console.log(list);
 autoGame(gameField, list);
