@@ -45,7 +45,7 @@ function stepsList(field) {
     return i === arr[ind - 1] + 1;
   });
   if (win) {
-    console.log('win!');
+    console.log('the list is complete!');
     return [];
   }
   // проверка на существование решения
@@ -212,9 +212,7 @@ function stepsList(field) {
       pathList.push([pposFrom, pposTo]);
     }
   }
-  console.log('pathList:');
-  console.log(pathList);
-  console.log('win!');
+  console.log('the list is complete!');
   return pathList;
 }
 
@@ -222,6 +220,20 @@ const list = stepsList(gameField);
 console.log('pathList:');
 console.log(list);
 
-// function autoGame(field, posList){
+function autoGame(field, posList) {
+  if (typeof posList === 'string') {
+    console.log(posList);
+    return posList;
+  }
+  const startFieldState = [...field];
+  posList.forEach((i) => {
+    const [posFrom, posTo] = i;
+    startFieldState[posTo] = startFieldState[posFrom];
+    startFieldState[posFrom] = 0;
+  });
+  console.log('finishFieldState:');
+  console.log(startFieldState);
+  return startFieldState;
+}
 
-// }
+autoGame(gameField, list);
