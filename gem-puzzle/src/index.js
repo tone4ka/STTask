@@ -2,13 +2,17 @@ import './styles/styles.scss';
 import shuffle from './shuffle';
 
 let cells = [];
-for (let i = 0; i <= 15; i += 1) {
+for (let i = 1; i <= 15; i += 1) {
   cells.push(i);
 }
-const gameField = shuffle(cells);
-cells.shift(0);
 cells.push(0);
+
+const gameField = shuffle();
+console.log('gameField');
+console.log(gameField);
+
 cells = cells.join(' ');
+console.log(cells);
 // const gameField = cells;
 
 function move(positions) {
@@ -57,7 +61,7 @@ function stepsList(field) {
   counter = counter + Math.trunc(posTo / 4) + 1;
   if (counter % 2 !== 0) {
     console.log('no solution');
-    return 'no solution!';
+    // return 'no solution!';
   }
   // алгоритм А*..................
   // шаг 1
@@ -76,8 +80,8 @@ function stepsList(field) {
 
   // шаг 2 гоняем циклом остальных соседей
   let counterCircle = 0;
-  // while (stepParentGHFopen.length > 0) {
-  while (counterCircle < 35000) {
+  while (stepParentGHFopen.length > 0) {
+  // while (counterCircle < 10000) {
     let isOpen;
     counterCircle += 1;
     // добавляем нулевую вершину в закрытые и убираем из открытых
@@ -107,6 +111,7 @@ function stepsList(field) {
         }
       }
       if (step === cells) {
+        stepParentGHFclosed.push([step, parent, g, h, f]);
         console.log('uuuuuuuuhhhyyyyyyy');
         break;
       }
@@ -128,6 +133,7 @@ function stepsList(field) {
         }
       }
       if (step === cells) {
+        stepParentGHFclosed.push([step, parent, g, h, f]);
         console.log('uuuuuuuuhhhyyyyyyy');
         break;
       }
@@ -149,6 +155,7 @@ function stepsList(field) {
         }
       }
       if (step === cells) {
+        stepParentGHFclosed.push([step, parent, g, h, f]);
         console.log('uuuuuuuuhhhyyyyyyy');
         break;
       }
@@ -169,6 +176,7 @@ function stepsList(field) {
           stepParentGHFopen.push([step, parent, g, h, f]);
         }
         if (step === cells) {
+          stepParentGHFclosed.push([step, parent, g, h, f]);
           console.log('uuuuuuuuhhhyyyyyyy');
           break;
         }
