@@ -144,8 +144,8 @@ export default function getStepsList(field) {
     isOpen = openSteps.findIndex((i) => i[0] === currField);
     openSteps.splice(isOpen, 1);
   }
-  console.log('closed:');
-  console.log(closedSteps);
+  // console.log('closed:');
+  // console.log(closedSteps);
 
   // создаем список родителей для собранного состояния
   let curState = cells;

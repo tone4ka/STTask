@@ -1,22 +1,14 @@
+import shuffle from './shuffle';
+import moveCell from './moveCell';
+import autoRun from './autoRun';
+
 let gridBox;
 let volume;
 const audioMp = document.createElement('audio');
 let vol = true;
-const cells = [];
+let cells = [];
 let cellsNum = [];
 const truPositions = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0';
-
-// функция-перемещатель на один ход
-function moveCell(positions) {
-  if (typeof positions === 'string') return;
-  const [posFrom, posTo] = positions;
-  const posFromCell = cells[posFrom];
-  const posToCell = cells[posTo];
-  cellsNum[posTo] = cellsNum[posFrom];
-  cellsNum[posFrom] = 0;
-  cells[posTo] = posFromCell;
-  cells[posFrom] = posToCell;
-}
 
 // подключаем аудио
 function audio() {
@@ -53,13 +45,13 @@ function createGameBox() {
 // функция создания панели навигации
 let move;
 let moves = 0;
+let reset;
 function navigationCreate() {
   const navigation = document.createElement('div');
   gameBox.appendChild(navigation).classList.add('navigation');
 
-  const reset = document.createElement('button');
+  reset = document.createElement('button');
   reset.innerHTML = 'RESET';
-  reset.addEventListener('click', () => resetGame());
   navigation.appendChild(reset).classList.add('navItem', 'reset');
 
   move = document.createElement('div');
@@ -72,7 +64,7 @@ function navigationCreate() {
 
   const autoPlay = document.createElement('button');
   autoPlay.innerHTML = 'AUTO PLAY';
-  autoPlay.addEventListener('click', () => runAutoGame());
+  autoPlay.addEventListener('click', () => autoRun(cells, cellsNum, move));
   navigation.appendChild(autoPlay).classList.add('navItem', 'reset');
 }
 
@@ -132,7 +124,7 @@ function gameProcess() {
         nullCell.style.top = `${topPosCur}px`;
         currentCell.style.left = `${leftPosNull}px`;
         currentCell.style.top = `${topPosNull}px`;
-        moveCell([currIndex, nullIndex]);
+        moveCell([currIndex, nullIndex], cells, cellsNum);
         if (cells.join(' ') === truPositions) {
           alert(`Ура! Вы решили головоломку за ${moves} ходов!`);
         }
@@ -141,12 +133,28 @@ function gameProcess() {
   });
 }
 
+// функция перезагрузки
+function resetGame() {
+  moves = 0;
+  gridBox.innerHTML = '';
+  cells = [];
+  cellsNum = [];
+  for (let i = 1; i <= 15; i += 1) {
+    cellsNum.push(i);
+  }
+  cellsNum.push(0);
+  cellsNum = shuffle(cellsNum);
+  createDigitCells(cellsNum);
+  setInBox();
+}
+
 // ф-ция начала игры
 export default function startGame(field) {
   cellsNum = [...field];
   createGameBox();
-  createDigitCells(cellsNum); // создаем массив с элементами DOM(клетками)
-  setInBox(); // заполняем ими коробку
-  navigationCreate(); // элементы управления
-  gameProcess(); // вешаем обработчик кликов на клетки
+  createDigitCells(cellsNum);
+  setInBox();
+  navigationCreate();
+  reset.addEventListener('click', () => resetGame());
+  gameProcess();
 }
