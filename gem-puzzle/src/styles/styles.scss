@@ -27,12 +27,12 @@ body {
     border: 2px solid #41c2a2a8;
   }
 
-  button{
+  button {
+    padding: 2px;
     background-color: #b6781a;
     border-radius: 5px;
-    outline: none;
+    border: none;
   }
-
 
   .gameBox {
     margin-top: 30px;
@@ -95,8 +95,10 @@ body {
   .btnVol{
     width: 19px;
     height: 19px;
-    background-image: url(../assets/images/musical-note.png);
+    background-image: url(../assets/images/musical-note.png) ;
+    background-size: cover;
   }
+
 
   .btnVol:hover{
     cursor: pointer;

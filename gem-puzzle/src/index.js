@@ -1,6 +1,8 @@
 import './styles/styles.scss';
 import shuffle from './shuffle';
 import getStepsList from './getStepsList';
+import startGame from './showUI';
+
 
 let cells = [];
 for (let i = 1; i <= 15; i += 1) {
@@ -38,8 +40,11 @@ function runAutoGame(field, posList) {
   return finishFieldState;
 }
 
+// запуск игры
+startGame(gameField);
+
 // запуск функций
-const list = getStepsList(gameField);
-console.log('pathList:');
-console.log(list);
-runAutoGame(gameField, list);
+// const list = getStepsList(gameField);
+// console.log('pathList:');
+// console.log(list);
+// runAutoGame(gameField, list);
