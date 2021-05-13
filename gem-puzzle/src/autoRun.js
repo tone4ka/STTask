@@ -21,14 +21,16 @@ export default async function autoRun(cells, cellsNum, move) {
     currentCell.style.top = `${topPosNull}px`;
     moves += 1;
     moveTextElement.innerText = `Move:${moves}`;
-    const F = function () {
-      moveCell(item, cells, cellsNum);// куда ее деть, чтобы она ждала окончания анимации???
-      console.log(item[0]);
-    };
-    currentCell.addEventListener('transitionend', () => {
-      F();
-      currentCell.removeEventListener('transitionend', F);
-    });
+    // const F = function () {
+    //   moveCell(item, cells, cellsNum);// куда ее деть, чтобы она ждала окончания анимации???
+    //   console.log(item[0]);
+    // };
+    // currentCell.addEventListener('transitionend', () => {
+    //   F();
+    //   currentCell.removeEventListener('transitionend', F);
+    // });
+    const completeAnim = await new Promise((resolve) => setTimeout(() => resolve(true), 1000));
+    return completeAnim;
   }
   // for (let i = 0; i < list.length; i += 1) {
   //   await makeStep(list[i]);
@@ -42,7 +44,8 @@ export default async function autoRun(cells, cellsNum, move) {
   // for (let i = 0; i < list.length; i += 1) {
   let i = 0;
   while (i < list.length) {
-    makeStep(list[i]);
+    await makeStep(list[i]);
+    moveCell(list[i], cells, cellsNum);
     i += 1;
   }
 }

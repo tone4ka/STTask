@@ -24,7 +24,7 @@ export default function shuffle(cells) {
     shuffleArr[posTo] = shuffleArr[posFrom];
     shuffleArr[posFrom] = 0;
   }
-  for (let i = 0; i < 40; i += 1) {
+  for (let i = 0; i < 50; i += 1) {
     const posTo = shuffleArr.indexOf(0);
     const pisitions = [];
     if (posTo > 3) {
