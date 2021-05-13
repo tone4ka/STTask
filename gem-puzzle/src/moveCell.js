@@ -1,4 +1,4 @@
-// функция-перемещатель на один ход
+// функция-перемещатель на один ход (модифицирует массив с номерами и массив с DOM элементами)
 export default function moveCell(positions, cells, cellsNum) {
   const newCells = cells;
   const newCellsNum = cellsNum;

@@ -126,7 +126,7 @@ function gameProcess() {
         currentCell.style.top = `${topPosNull}px`;
         moveCell([currIndex, nullIndex], cells, cellsNum);
         if (cells.join(' ') === truPositions) {
-          alert(`Ура! Вы решили головоломку за ${moves} ходов!`);
+          alert(`You solved the puzzle in ${moves} moves!`);
         }
       }
     }
@@ -136,6 +136,7 @@ function gameProcess() {
 // функция перезагрузки
 function resetGame() {
   moves = 0;
+  move.innerText = `Move:${moves}`;
   gridBox.innerHTML = '';
   cells = [];
   cellsNum = [];

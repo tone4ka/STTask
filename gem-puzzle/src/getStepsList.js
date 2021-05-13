@@ -13,7 +13,7 @@ export default function getStepsList(field) {
     return i === arr[ind - 1] + 1;
   });
   if (win) {
-    console.log('the list is complete!');
+    alert('the list is complete!');
     return [];
   }
   // проверяем, имеет ли решение переданное состояние поля
@@ -26,7 +26,7 @@ export default function getStepsList(field) {
   });
   parity = parity + Math.trunc(posTo / 4) + 1;
   if (parity % 2 !== 0) {
-    console.log('no solution');
+    alert('no solution');
     return 'no solution!';
   }
   // алгоритм А* для поиска решения головоломки..................
@@ -144,9 +144,6 @@ export default function getStepsList(field) {
     isOpen = openSteps.findIndex((i) => i[0] === currField);
     openSteps.splice(isOpen, 1);
   }
-  // console.log('closed:');
-  // console.log(closedSteps);
-
   // создаем список родителей для собранного состояния
   let curState = cells;
   const parentsArr = [];
@@ -167,6 +164,5 @@ export default function getStepsList(field) {
       pathList.push([pposFrom, pposTo]);
     }
   }
-  console.log('the list is complete!');
   return pathList;
 }

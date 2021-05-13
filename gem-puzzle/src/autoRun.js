@@ -21,31 +21,17 @@ export default async function autoRun(cells, cellsNum, move) {
     currentCell.style.top = `${topPosNull}px`;
     moves += 1;
     moveTextElement.innerText = `Move:${moves}`;
-    // const F = function () {
-    //   moveCell(item, cells, cellsNum);// куда ее деть, чтобы она ждала окончания анимации???
-    //   console.log(item[0]);
-    // };
-    // currentCell.addEventListener('transitionend', () => {
-    //   F();
-    //   currentCell.removeEventListener('transitionend', F);
-    // });
     const completeAnim = await new Promise((resolve) => setTimeout(() => resolve(true), 1000));
-    return completeAnim;
+    return completeAnim; // поставила задержку, чтобы клетка успела передвинуться
   }
-  // for (let i = 0; i < list.length; i += 1) {
-  //   await makeStep(list[i]);
-  //   moveCell(list[i], cells, cellsNum);
-  //   if (cellsNum.join(' ') === truPositions) {
-  //     alert(`Ура! Вы решили головоломку за ${moves} ходов!`);
-  //   }
-  // }
-  // cells.list[i][0].addEventListener('transitionend', F);
 
-  // for (let i = 0; i < list.length; i += 1) {
   let i = 0;
   while (i < list.length) {
-    await makeStep(list[i]);
-    moveCell(list[i], cells, cellsNum);
+    await makeStep(list[i]); // передвижение клеток на экране
+    moveCell(list[i], cells, cellsNum); // передвижение клеток в хранящих массивах
     i += 1;
+    if (cellsNum.join(' ') === truPositions) {
+      alert(`You solved the puzzle in ${moves} moves!`);
+    }
   }
 }

@@ -1,20 +1,4 @@
-// export default function shuffle(array) {
-//   const shuffleArr = [...array];
-//   let currentIndex = 10;
-//   let temporaryValue;
-//   let randomIndex;
-
-//   while (currentIndex !== 0) {
-//     randomIndex = Math.floor(Math.random() * currentIndex);
-//     currentIndex -= 1;
-//     temporaryValue = shuffleArr[currentIndex];
-//     shuffleArr[currentIndex] = shuffleArr[randomIndex];
-//     shuffleArr[randomIndex] = temporaryValue;
-//   }
-//   return shuffleArr;
-// }
-
-// заменила обычное перемешивание на 40 случайных ходов
+// заменила обычное перемешивание на 50 случайных ходов
 export default function shuffle(cells) {
   const shuffleArr = [...cells];
 

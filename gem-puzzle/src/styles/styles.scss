@@ -10,17 +10,6 @@ body {
     background-color: #b4862344;
   }
 
-  /*animation*/
-.animationcCell{
-  position: absolute;
-  top: 900px;
-  right: 20px;
-  height: 20px;
-  width: 20px;
-  background-color: #3de1ecb7;
-  animation: aniWay ease-in 1s infinite;
-}
-
   .startGame{
     display: flex;
     padding: 5px 10px;
@@ -65,6 +54,7 @@ body {
     position: absolute;
     transition: all 0.3s;
   }
+
   .cell:hover{
     cursor: pointer;
     background-color: #41c2a2a8;
@@ -74,7 +64,7 @@ body {
     opacity: 0;
   }
 
-  .navigation{
+  .navigation {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -84,12 +74,13 @@ body {
     margin-bottom: 5px;
   }
 
-  .navItem{
+  .navItem {
     margin-right: 10px;
   }
-  select{
-    background-color: #d8d4d0;
-    border-radius: 3px;
+
+  .move {
+    width: 100px;
+    text-align: center;
   }
 
   .btnVol{
@@ -98,7 +89,6 @@ body {
     background-image: url(../assets/images/musical-note.png) ;
     background-size: cover;
   }
-
 
   .btnVol:hover{
     cursor: pointer;
@@ -110,65 +100,7 @@ body {
     background-color: #41c2a2a8;
   }
 
-  select:hover{
-    cursor: pointer;
-    background-color: #41c2a2a8;
-  }
-
   .reset:hover{
     cursor: pointer;
     background-color: #41c2a2a8;
-  }
-  .showWinList:hover{
-    cursor: pointer;
-    background-color: #41c2a2a8;
-  }
-
-  /*...................список победителей..................*/
-  .winnersBox{
-    margin-top: 20px;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border:1px solid rgba(248, 140, 38, 0.788);
-    border-radius: 10px;
-    background-color: #fff5d3;
-    box-shadow: 0 0 3px #27231e;
-  }
-  .winnersBox div{
-    margin-bottom: 5px;
-  }
-  div .titleList {
-    font-weight: bold;
-    font-size: large;
-    margin-bottom: 10px;
-  }
-  .closeWinnerButton{
-    box-shadow: 0 0 1px #27231e;
-    margin-top: 15px;
-  }
-  .closeWinnerButton:hover{
-    cursor: pointer;
-    background-color: #41c2a2a8;
-  }
-
-
-  /* ANIMATION */
-  @keyframes aniWay{
-    50%{
-      border-radius: 30%;
-    }
-    100%{
-      top: -60px;
-      transform: rotate(740deg);
-    }
-  }
-
-  /*---------------media-----------*/
-  @media (max-width: 530px) {
-    .animationcCell{
-      display: none;
-    }
   }
