@@ -126,7 +126,7 @@ function gameProcess() {
         currentCell.style.top = `${topPosNull}px`;
         moveCell([currIndex, nullIndex], cells, cellsNum);
         if (cellsNum.join(' ') === truPositions) {
-          alert(`You solved the puzzle in ${moves} moves!`);
+          setTimeout(() => alert(`You solved the puzzle in ${moves} moves!`), 1000);
         }
       }
     }
