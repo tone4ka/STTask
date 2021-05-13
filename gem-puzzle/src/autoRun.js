@@ -2,7 +2,7 @@ import getStepsList from './getStepsList';
 import moveCell from './moveCell';
 
 const truPositions = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0';
-// цункция автозавершения игры
+// функция автозавершения игры
 export default async function autoRun(cells, cellsNum, move) {
   const moveTextElement = move;
   let moves = 0;
