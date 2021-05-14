@@ -8,8 +8,7 @@ for (let i = 1; i <= 15; i += 1) {
 cells.push(0);
 
 const gameField = shuffle(cells);
-console.log('gameField');
-console.log(gameField);
+console.log(`gameField: ${gameField}`);
 cells = cells.join(' ');
 
 // функция-перемещатель на один ход
@@ -32,13 +31,11 @@ function autoGame(field, posList) {
     startFieldState[posTo] = startFieldState[posFrom];
     startFieldState[posFrom] = 0;
   });
-  console.log('finishFieldState:');
-  console.log(startFieldState);
+  console.log(`finishFieldState ${startFieldState}`);
   return startFieldState;
 }
 
 // запуск функций
 const list = getStepsList(gameField);
-console.log('pathList:');
-console.log(list);
+console.log(`pathList: ${list}`);
 autoGame(gameField, list);
