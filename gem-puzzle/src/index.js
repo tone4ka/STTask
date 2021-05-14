@@ -2,14 +2,13 @@ import shuffle from './shuffle.js';
 import getStepsList from './getStepsList.js';
 import move from './move.js';
 
-let cells = [];
+const cells = [];
 for (let i = 1; i <= 15; i += 1) {
   cells.push(i);
 }
 cells.push(0);
 const gameField = shuffle(cells);
 console.log(`gameField: ${gameField}`);
-cells = cells.join(' ');
 
 // функция автоматического решения (по условию возвращает на выходе собранное поле)
 function autoGame(field, posList) {
@@ -20,6 +19,6 @@ function autoGame(field, posList) {
 }
 
 // запуск функций
-const list = getStepsList(gameField);
-console.log(`pathList: ${list}`);
-autoGame(gameField, list);
+const pathList = getStepsList(gameField);
+console.log(`pathList: ${pathList}`);
+autoGame(gameField, pathList);
