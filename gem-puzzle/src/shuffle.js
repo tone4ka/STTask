@@ -1,3 +1,5 @@
+import getPositionsObj from './getPositionsObj.js';
+
 // функция для перемешивания массивов
 export default function shuffle(cellsArr) {
   const shuffleArr = [...cellsArr];
@@ -10,28 +12,19 @@ export default function shuffle(cellsArr) {
   for (let i = 0; i < shuffleCount; i += 1) {
     const posTo = shuffleArr.indexOf(0);
     const pisitions = [];
+    const positionsObj = getPositionsObj(posTo);
 
-    const isNotFirstString = posTo > 3;
-    const isNotLeftСolumn = posTo % 4 !== 0;
-    const isNotRightColumn = (posTo + 1) % 4 !== 0;
-    const isNotLastString = posTo < 12;
-
-    const topPosFrom = posTo - 4;
-    const leftPosFrom = posTo - 1;
-    const rightPosFrom = posTo + 1;
-    const bottomPosFrom = posTo + 4;
-
-    if (isNotFirstString) {
-      pisitions.push([topPosFrom, posTo]);
+    if (positionsObj.isNotFirstString) {
+      pisitions.push([positionsObj.topPosFrom, posTo]);
     }
-    if (isNotLeftСolumn) {
-      pisitions.push([leftPosFrom, posTo]);
+    if (positionsObj.isNotLeftСolumn) {
+      pisitions.push([positionsObj.leftPosFrom, posTo]);
     }
-    if (isNotRightColumn) {
-      pisitions.push([rightPosFrom, posTo]);
+    if (positionsObj.isNotRightColumn) {
+      pisitions.push([positionsObj.rightPosFrom, posTo]);
     }
-    if (isNotLastString) {
-      pisitions.push([bottomPosFrom, posTo]);
+    if (positionsObj.isNotLastString) {
+      pisitions.push([positionsObj.bottomPosFrom, posTo]);
     }
     mover(pisitions[Math.floor(Math.random() * pisitions.length)]);
   }

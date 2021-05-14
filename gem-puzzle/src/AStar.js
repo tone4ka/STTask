@@ -1,4 +1,5 @@
 import move from './move.js';
+import getPositionsObj from './getPositionsObj.js';
 
 export default function AStar(field) {
   let parentStateField = [...field].join(' ');
@@ -28,10 +29,11 @@ export default function AStar(field) {
   do {
     const parentStateFieldArr = parentStateField.split(' ').map((i) => +i);
     const posTo = parentStateFieldArr.indexOf(0);
-    if (posTo > 3) getNewOpenStep([posTo - 4, posTo]);
-    if (posTo % 4 !== 0) getNewOpenStep([posTo - 1, posTo]);
-    if ((posTo + 1) % 4 !== 0) getNewOpenStep([posTo + 1, posTo]);
-    if (posTo < 12) getNewOpenStep([posTo + 4, posTo]);
+    const positionsObj = getPositionsObj(posTo);
+    if (positionsObj.isNotFirstString) getNewOpenStep([positionsObj.topPosFrom, posTo]);
+    if (positionsObj.isNotLeftСolumn) getNewOpenStep([positionsObj.leftPosFrom, posTo]);
+    if (positionsObj.isNotRightColumn) getNewOpenStep([positionsObj.rightPosFrom, posTo]);
+    if (positionsObj.isNotLastString) getNewOpenStep([positionsObj.bottomPosFrom, posTo]);
     // поиск нового шага с минимальным весом
     let minWeight = Infinity;
     let newStep;
@@ -51,6 +53,5 @@ export default function AStar(field) {
     isOpen = openSteps.findIndex((i) => i[0] === currField);
     openSteps.splice(isOpen, 1);
   } while (parentStateField !== '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0');
-  // возвращаем список закрытых вершин на момент нахождения правильного решения
   return closedSteps;
 }
