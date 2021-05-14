@@ -1,36 +1,20 @@
 import shuffle from './shuffle.js';
 import getStepsList from './getStepsList.js';
+import move from './move.js';
 
 let cells = [];
 for (let i = 1; i <= 15; i += 1) {
   cells.push(i);
 }
 cells.push(0);
-
 const gameField = shuffle(cells);
 console.log(`gameField: ${gameField}`);
 cells = cells.join(' ');
 
-// функция-перемещатель на один ход
-// (по условию модифицирует само поле, поэтому в авторешении ее не использовала)
-function move(positions) {
-  if (typeof positions === 'string') return;
-  const [posFrom, posTo] = positions;
-  gameField[posTo] = gameField[posFrom];
-  gameField[posFrom] = 0;
-}
-
 // функция автоматического решения (по условию возвращает на выходе собранное поле)
 function autoGame(field, posList) {
-  if (typeof posList === 'string') {
-    return false;
-  }
-  const startFieldState = [...field];
-  posList.forEach((item) => {
-    const [posFrom, posTo] = item;
-    startFieldState[posTo] = startFieldState[posFrom];
-    startFieldState[posFrom] = 0;
-  });
+  if (typeof posList === 'string') return false;
+  const startFieldState = posList.reduce((cur, item) => move(item, cur), [...field]);
   console.log(`finishFieldState ${startFieldState}`);
   return startFieldState;
 }
