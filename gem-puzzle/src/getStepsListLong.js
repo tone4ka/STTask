@@ -1,7 +1,7 @@
 import AStarLong from './AStarLong.js';
 
 // функция, выдающая список ходов для переданного состояния поля
-export default function getStepsList(field) {
+export default function getStepsListLong(field) {
   // проверяем, не в собранном ли состоянии передано поле
   if ([...field].join(' ') === '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0') return [];
   // проверяем, имеет ли решение переданное состояние поля
@@ -18,22 +18,25 @@ export default function getStepsList(field) {
     return 'no solution!';
   }
   const AStarСlosedSteps = AStarLong(field);
-  // создаем список родителей, начиная с собранного состояния (как расшифровать родителя длинного хода????????????????????????????????????)
+  // создаем список родителей, начиная с собранного состояния 
+  // переделала массив родителей в массив [родитель, [промежуточные родители]]
   let curState = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0';
   const parentsArr = [];
   do {
     const state = curState;
     const elem = AStarСlosedSteps.find((i) => i[0] === state);
     [, curState] = elem;
-    parentsArr.unshift(curState);
+    const intermediateParents = elem[elem.length-1];
+    parentsArr.unshift([curState, intermediateParents]);
   } while (curState !== [...field].join(' '));
+  console.log(parentsArr);
 
-  // создаем список оптимальных ходов, определяя позиции ходов по списку родителей
-  const pathList = [];
-  for (let i = 0; i < parentsArr.length; i += 1) {
-    const posTo = parentsArr[i].split(' ').indexOf('0');
-    const posFrom = (i === parentsArr.length - 1) ? 15 : parentsArr[i + 1].split(' ').indexOf('0');
-    pathList.push([posFrom, posTo]);
-  }
-  return pathList;
+//   // создаем список оптимальных ходов, определяя позиции ходов по списку родителей
+//   const pathList = [];
+//   for (let i = 0; i < parentsArr.length; i += 1) {
+//     const posTo = parentsArr[i].split(' ').indexOf('0');
+//     const posFrom = (i === parentsArr.length - 1) ? 15 : parentsArr[i + 1].split(' ').indexOf('0');
+//     pathList.push([posFrom, posTo]);
+//   }
+//   return pathList;
 }

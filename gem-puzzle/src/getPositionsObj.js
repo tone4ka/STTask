@@ -32,7 +32,7 @@ export function getLongPositionsObj(posNullCell) {
     left2PosFrom: posNullCell - 2,
     left3PosFrom: posNullCell - 3,
 
-    righ1tPosFrom: posNullCell + 1,
+    right1PosFrom: posNullCell + 1,
     right2PosFrom: posNullCell + 2,
     right3PosFrom: posNullCell + 3,
 

@@ -2,6 +2,7 @@ import './styles/styles.css';
 import shuffle from './shuffle.js';
 import getStepsList from './getStepsList.js';
 import move from './move.js';
+import getStepsListLong from './getStepsListLong.js';
 
 const cells = [];
 for (let i = 1; i <= 15; i += 1) {
@@ -20,6 +21,7 @@ function autoGame(field, posList) {
 }
 
 // запуск функций
-const pathList = getStepsList(gameField);
-console.log(`pathList: [${pathList.join(']->[')}]`);
-autoGame(gameField, pathList);
+getStepsListLong(gameField);
+// const pathList = getStepsList(gameField);
+// console.log(`pathList: [${pathList.join(']->[')}]`);
+// autoGame(gameField, pathList);
