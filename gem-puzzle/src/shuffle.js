@@ -8,7 +8,7 @@ export default function shuffle(cellsArr) {
     shuffleArr[posTo] = shuffleArr[posFrom];
     shuffleArr[posFrom] = 0;
   }
-  const shuffleCount = 40;
+  const shuffleCount = 50;
   for (let i = 0; i < shuffleCount; i += 1) {
     const posTo = shuffleArr.indexOf(0);
     const pisitions = [];

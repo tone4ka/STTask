@@ -16,8 +16,6 @@ export default function AStarLong(field) {
   // мув теперь возвращает массив [новое состояние поля, [массив родителей-строк]]!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // кладу РЕВЕРСИРОВАННЫЙ массив промежуточных родителей в параметры шага!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   const getNewOpenStep = (positions) => {
-    console.log(positions);
-    console.log(openSteps);
     for (let key in positions) {
       const fieldArr = parentStateField.split(' ').map((i) => +i);
       const newStateAndParentsArr = moveLong(positions[key], fieldArr);
@@ -29,26 +27,22 @@ export default function AStarLong(field) {
         return i !== 0 ? count + Math.abs(i - (ind + 1)) : count;
       }, 0);
       const step = newStateField.join(' ');
-      console.log(!closedSteps.some((i) => i[0] === step));
       if (!closedSteps.some((i) => i[0] === step)) {
         isOpen = openSteps.findIndex((i) => i[0] === step);
         if (isOpen === -1) {
-          console.log('isOpen === -1');
           openSteps.push([step, parentStateField, distance, heuristic, distance + heuristic, parrentsStringArr]);
         } else if (openSteps[isOpen][4] < distance + heuristic) {
-          console.log('openSteps[isOpen][4] < distance + heuristic');
           openSteps[isOpen] = [step, parentStateField, distance, heuristic, distance + heuristic, parrentsStringArr];
         }
       }
     }
-    console.log(openSteps);
   };
   // запускаем цикл поиска новых шагов для каждого соседа(переделала полностью под длинные ходы)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   do {
     const parentStateFieldArr = parentStateField.split(' ').map((i) => +i);
     const posTo = parentStateFieldArr.indexOf(0);
     const positionsObj = getLongPositionsObj(posTo);
-    if (positionsObj.is1tString) {
+    if (positionsObj.is1String) {
       getNewOpenStep({
         1: [[positionsObj.bottom1PosFrom, posTo]],
         2: [
@@ -63,7 +57,7 @@ export default function AStarLong(field) {
       });
     }
 
-    if (positionsObj.is2tString) {
+    if (positionsObj.is2String) {
       getNewOpenStep({
         1: [[positionsObj.top1PosFrom, posTo]],
         2: [[positionsObj.bottom1PosFrom, posTo]],
@@ -73,8 +67,7 @@ export default function AStarLong(field) {
         ],
       });
     }
-
-    if (positionsObj.is3tString) {
+    if (positionsObj.is3String) {
       getNewOpenStep({
         1: [[positionsObj.top1PosFrom, posTo]],
         2: [
@@ -84,8 +77,7 @@ export default function AStarLong(field) {
         3: [[positionsObj.bottom1PosFrom, posTo]],
       });
     }
-
-    if (positionsObj.is4tString) {
+    if (positionsObj.is4String) {
       getNewOpenStep({
         1: [[positionsObj.top1PosFrom, posTo]],
         2: [
@@ -99,7 +91,6 @@ export default function AStarLong(field) {
         ],
       });
     }
-
     if (positionsObj.is1Сolumn) {
       getNewOpenStep({
         1: [[positionsObj.right1PosFrom, posTo]],
@@ -114,7 +105,6 @@ export default function AStarLong(field) {
         ],
       });
     }
-
     if (positionsObj.is2Сolumn) {
       getNewOpenStep({
         1: [[positionsObj.left1PosFrom, posTo]],
@@ -125,7 +115,6 @@ export default function AStarLong(field) {
         ],
       });
     }
-
     if (positionsObj.is3Сolumn) {
       getNewOpenStep({
         1: [[positionsObj.left1PosFrom, posTo]],
@@ -136,7 +125,6 @@ export default function AStarLong(field) {
         3: [[positionsObj.right1PosFrom, posTo]],
       });
     }
-
     if (positionsObj.is4Сolumn) {
       getNewOpenStep({
         1: [[positionsObj.left1PosFrom, posTo]],
@@ -156,9 +144,6 @@ export default function AStarLong(field) {
     let minWeight = Infinity;
     let newStep;
     let newDistance;
-
-    console.log(openSteps);
-
     openSteps.forEach((item) => {
       if (item[4] < minWeight) {
         [, , , , minWeight] = item;
@@ -168,13 +153,11 @@ export default function AStarLong(field) {
     });
     // обновляем параметры для нового шага и перемещаем его в закрытые
     distance = newDistance + 1;
-    console.log(closedSteps);
     [parentStateField] = newStep;
     closedSteps.push(newStep);
     const currField = parentStateField;
     isOpen = openSteps.findIndex((i) => i[0] === currField);
     openSteps.splice(isOpen, 1);
-    console.log(parentStateField);
   } while (parentStateField !== '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0');
   console.log(closedSteps);
   return closedSteps;
