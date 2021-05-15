@@ -11,7 +11,7 @@ export function getPositionsObj(posNullCell) {
   };
 }
 
-// позиции для ллинных ходов(с экспортами не накосячила?????????????????)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// позиции для ллинных ходов
 export function getLongPositionsObj(posNullCell) {
   return {
     is1String: posNullCell < 4,

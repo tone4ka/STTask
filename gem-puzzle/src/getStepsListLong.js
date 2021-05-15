@@ -29,14 +29,17 @@ export default function getStepsListLong(field) {
     const intermediateParents = elem[elem.length-1];
     parentsArr.unshift([curState, intermediateParents]);
   } while (curState !== [...field].join(' '));
-  console.log(parentsArr);
-
-//   // создаем список оптимальных ходов, определяя позиции ходов по списку родителей
-//   const pathList = [];
-//   for (let i = 0; i < parentsArr.length; i += 1) {
-//     const posTo = parentsArr[i].split(' ').indexOf('0');
-//     const posFrom = (i === parentsArr.length - 1) ? 15 : parentsArr[i + 1].split(' ').indexOf('0');
-//     pathList.push([posFrom, posTo]);
-//   }
-//   return pathList;
+  const intermediateParentsArr = parentsArr.map((item)=> item[1]);
+  // создаем список оптимальных ходов, определяя позиции ходов по списку родителей(теперь выдает не массив пар, а массив массивов пар)
+  const pathList = [];
+  for (let i = 0; i < intermediateParentsArr.length; i += 1) {
+    const currentPathList = [];
+    for (let j = 0; j < intermediateParentsArr[i].length - 1; j += 1){
+    const posTo = intermediateParentsArr[i][j].split(' ').indexOf('0');
+    const posFrom = intermediateParentsArr[i][j + 1].split(' ').indexOf('0');
+    currentPathList.push([posFrom, posTo]);
+    }
+    pathList.push(currentPathList);
+  }
+  return pathList;
 }

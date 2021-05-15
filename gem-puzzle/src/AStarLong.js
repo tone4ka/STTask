@@ -1,9 +1,6 @@
 import moveLong from './moveLong.js';
 import { getLongPositionsObj } from './getPositionsObj.js';
 
-//Функцию «перемещатель» длинным ходом (интерфейс «перемещателя» предложить)
-// Функцию «решатель» с использованием длинных ходов
-
 export default function AStarLong(field) {
   let parentStateField = [...field].join(' ');
   const openSteps = [];
@@ -11,17 +8,17 @@ export default function AStarLong(field) {
   let distance = 0;
   let isOpen;
   // функция определения следующего возможного состояния поля(добавляет его в список открытых шагов)
-  // добавила перебор объекта с позициями и заменила перемещатель на длинные ходы!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  // (теперь принимает не пару-массив, а объект, каждое св-во которого-массив с одной-тремя парами-массивами)!!!!!!!!!!!!!!!!!!!
-  // мув теперь возвращает массив [новое состояние поля, [массив родителей-строк]]!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  // кладу РЕВЕРСИРОВАННЫЙ массив промежуточных родителей в параметры шага!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // добавила перебор объекта с позициями и заменила перемещатель на длинные ходы
+  // (теперь принимает не пару-массив, а объект, каждое св-во которого-массив с одной-тремя парами-массивами)
+  // мув теперь возвращает массив [новое состояние поля, [массив промежуточных родителей-строк]]
+  // кладу массив промежуточных родителей отдельно в параметры шага
   const getNewOpenStep = (positions) => {
     for (let key in positions) {
       const fieldArr = parentStateField.split(' ').map((i) => +i);
       const newStateAndParentsArr = moveLong(positions[key], fieldArr);
       // console.log(newStateAndParentsArr);
       const newStateField = newStateAndParentsArr[0];
-      const parrentsStringArr = newStateAndParentsArr[1].reverse();
+      const parrentsStringArr = newStateAndParentsArr[1];
       const heuristic = newStateField.reduce((count, i, ind) => {
         if (ind !== 15) return i !== ind + 1 ? count + Math.abs(i - (ind + 1)) : count;
         return i !== 0 ? count + Math.abs(i - (ind + 1)) : count;
@@ -37,7 +34,7 @@ export default function AStarLong(field) {
       }
     }
   };
-  // запускаем цикл поиска новых шагов для каждого соседа(переделала полностью под длинные ходы)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // запускаем цикл поиска новых шагов для каждого соседа(переделала условия добавления новых открытых вершин под длинные ходы)
   do {
     const parentStateFieldArr = parentStateField.split(' ').map((i) => +i);
     const posTo = parentStateFieldArr.indexOf(0);
@@ -56,7 +53,6 @@ export default function AStarLong(field) {
         ],
       });
     }
-
     if (positionsObj.is2String) {
       getNewOpenStep({
         1: [[positionsObj.top1PosFrom, posTo]],
@@ -159,6 +155,5 @@ export default function AStarLong(field) {
     isOpen = openSteps.findIndex((i) => i[0] === currField);
     openSteps.splice(isOpen, 1);
   } while (parentStateField !== '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0');
-  console.log(closedSteps);
   return closedSteps;
 }
