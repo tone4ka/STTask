@@ -1,3 +1,4 @@
+import './styles/styles.css';
 import shuffle from './shuffle.js';
 import getStepsList from './getStepsList.js';
 import move from './move.js';
@@ -20,5 +21,5 @@ function autoGame(field, posList) {
 
 // запуск функций
 const pathList = getStepsList(gameField);
-console.log(`pathList: ${pathList}`);
+console.log(`pathList: [${pathList.join(']->[')}]`);
 autoGame(gameField, pathList);
