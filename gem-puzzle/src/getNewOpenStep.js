@@ -1,10 +1,16 @@
-import moveLong from './moveLong.js';
+import moveLong from './moveLong';
 
-export default function getNewOpenStep(positions, parentStateField, closedSteps, openSteps) {
+// функция определения следующего возможного состояния поля(добавляет его в список открытых шагов)
+// добавила перебор объекта с позициями и заменила перемещатель на длинные ходы
+// (теперь принимает не пару-массив, а объект,
+// каждое св-во которого-массив с одной-тремя парами-массивами)
+// мув теперь возвращает массив [новое состояние поля, [массив промежуточных родителей-строк]]
+// кладу массив промежуточных родителей отдельно в параметры шага
+export default function getNewOpenStep(positions, parentStateField, closedSteps, openSteps, distance) {
   const positionsArr = Object.values(positions);
   for (let path = 0; path < positionsArr.length; path += 1) {
     const fieldArr = parentStateField.split(' ').map((i) => +i);
-    const newStateAndParentsArr = moveLong(positions[path], fieldArr);
+    const newStateAndParentsArr = moveLong(positionsArr[path], fieldArr);
     // console.log(newStateAndParentsArr);
     const newStateField = newStateAndParentsArr[0];
     const parrentsStringArr = newStateAndParentsArr[1];
