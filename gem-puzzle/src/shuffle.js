@@ -1,4 +1,4 @@
-import {getPositionsObj} from './getPositionsObj.js';
+import { getPositionsObj } from './getPositionsObj.js';
 
 // функция для перемешивания массивов
 export default function shuffle(cellsArr) {

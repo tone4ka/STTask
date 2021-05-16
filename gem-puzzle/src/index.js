@@ -1,4 +1,5 @@
-// import './styles/styles.css';  если раскомментировать импорт и удалить в package.json type:module - можно смотреть результаты в консоли браузера(npm run dev)
+import './styles/styles.css';  
+// если раскомментировать импорт и удалить в package.json type:module - можно смотреть результаты в консоли браузера(npm run dev)
 import shuffle from './shuffle.js';
 import moveLong from './moveLong.js';
 import getStepsListLong from './getStepsListLong.js';
